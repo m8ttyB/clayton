@@ -4,25 +4,25 @@ from psychopy import visual, core, event, logging
 # only log critical errors thrown by psychopy
 logging.console.setLevel(logging.CRITICAL)
 
-# create window in which we run the experiment
+
 def create_experiment_window(color):
-    window = visual.Window([1024,768], allowGUI=True, fullscr=False,
-                            units='pix', color=color, colorSpace='rgb')
+    '''create window in which we run the experiment'''
+    window = visual.Window([1024, 768], allowGUI=True, fullscr=False,
+                           units='pix', color=color, colorSpace='rgb')
     return window
 
 
 def create_square(window, width, height, color):
     square = visual.Rect(window,
-                        width=300, height=300,
-                        lineColor=color, # line color in rgb values
-                        lineWidth=1, # width of line surrounding the stmimulus
-                        fillColor=color, # fill color in rgb values
-                        fillColorSpace='rgb', # color space of fill color
-                        interpolate=True,
-                        opacity=1, # no opacity
-                        pos=[0,0], # center it in the middle of the screen
-                        autoLog=False
-                        )
+                         width=300, height=300,
+                         lineColor=color,  # line color in rgb values
+                         lineWidth=1,  # width of line surrounding the stimulus
+                         fillColor=color,  # fill color in rgb values
+                         fillColorSpace='rgb',  # color space of fill color
+                         interpolate=True,
+                         opacity=1,  # no opacity
+                         pos=[0, 0],  # center it in the middle of the screen
+                         autoLog=False)
     return square
 
 
@@ -37,31 +37,38 @@ def main(window, square, color):
 
     # do this until a key is pressed
     while keynotpressed:
+        # update fill color of stimulus
         new_color = [color[0], color[1], n]
-        square.fillColor = new_color # update fill color of stimulus
-        square.lineColor = new_color # update line color of stimulus
-        n = n + 0.005 # increment of the rgb value we are going to change
-        if n > 1: n = 1 # make sure the changed rgb value stays within the allowed range
+        square.fillColor = new_color
+        square.lineColor = new_color
+        # increment of the rgb value we are going to change
+        n = n + 0.005
+        # make sure the changed rgb value stays within the allowed range
+        if n > 1:
+            n = 1
 
         # check whether the space bar was pressed
         for keys in event.getKeys(timeStamped=True):
-            if keys[0]in ['space']:
+            if keys[0] in ['space']:
                 keynotpressed = False
                 print_color(new_color)
-        square.draw() # draw the stimulus to the buffer
-        mywin.flip() # show the buffer on the screen
+        square.draw()  # draw the stimulus to the buffer
+        mywin.flip()  # show the buffer on the screen
 
 
 if __name__ == '__main__':
     # color = [-1,1,0] # green
-    color = [1, 0.294117647058824, -1] # orange
+    color = [1, 0.294117647058824, -1]  # orange
+
+    # create a window to run experiments in
     mywin = create_experiment_window('black')
+
     # create clock to keep track of time (not used yet)
     trialClock = core.Clock()
 
-    # square = create_square(mywin, 300, 300, [-1,1,0])
+    # create a square in the experiment window
     square = create_square(mywin, 300, 300, color)
 
     main(mywin, square, color)
-    mywin.close() # close the window
-    core.quit() # end the program
+    mywin.close()  # close the window
+    core.quit()  # end the program
